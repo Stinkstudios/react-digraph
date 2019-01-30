@@ -15,75 +15,88 @@
   limitations under the License.
 */
 
-import * as d3 from 'd3';
-import * as React from 'react';
+import * as d3 from "d3";
+import * as React from "react";
 // This works in Typescript but causes an import loop for Flowtype. We'll just use `any` below.
 // import { type LayoutEngine } from '../utilities/layout-engine/layout-engine-config';
-import Edge from './edge';
-import GraphUtils from './graph-util';
-import NodeText from './node-text';
+import Edge from "./edge";
+import GraphUtils from "./graph-util";
+import NodeText from "./node-text";
 
 export type INode = {
-  title: string;
-  x?: number | null;
-  y?: number | null;
-  type?: string;
-  subtype?: string | null;
-  [key: string]: any;
+  title: string,
+  x?: number | null,
+  y?: number | null,
+  type?: string,
+  subtype?: string | null,
+  [key: string]: any
 };
 
 type INodeProps = {
-  data: INode;
-  id: string;
-  nodeTypes: any; // TODO: make a nodeTypes interface
-  nodeSubtypes: any; // TODO: make a nodeSubtypes interface
-  opacity?: number;
-  nodeKey: string;
-  nodeSize?: number;
-  onNodeMouseEnter: (event: any, data: any, hovered: boolean) => void;
-  onNodeMouseLeave: (event: any, data: any) => void;
-  onNodeMove: (point: IPoint, id: string, shiftKey: boolean) => void;
-  onNodeSelected: (data: any, id: string, shiftKey: boolean) => void;
-  onNodeUpdate: (point: IPoint, id: string, shiftKey: boolean) => void;
+  data: INode,
+  id: string,
+  nodeTypes: any, // TODO: make a nodeTypes interface
+  nodeSubtypes: any, // TODO: make a nodeSubtypes interface
+  opacity?: number,
+  nodeKey: string,
+  nodeSize?: number,
+  onNodeMouseEnter: (event: any, data: any, hovered: boolean) => void,
+  onNodeMouseLeave: (event: any, data: any) => void,
+  onNodeMove: (point: IPoint, id: string, shiftKey: boolean) => void,
+  onNodeSelected: (data: any, id: string, shiftKey: boolean) => void,
+  onNodeUpdate: (point: IPoint, id: string, shiftKey: boolean) => void,
   renderNode?: (
     nodeRef: any,
     data: any,
     id: string,
     selected: boolean,
     hovered: boolean
-  ) => any;
-  renderNodeText?: (data: any, id: string | number, isSelected: boolean) => any;
-  isSelected: boolean;
-  layoutEngine?: any;
-  viewWrapperElem: HTMLDivElement;
+  ) => any,
+  renderNodeText?: (data: any, id: string | number, isSelected: boolean) => any,
+  isSelected: boolean,
+  layoutEngine?: any,
+  viewWrapperElem: HTMLDivElement
 };
 
 type INodeState = {
-  hovered: boolean;
-  x: number;
-  y: number;
-  selected: boolean;
-  mouseDown: boolean;
-  drawingEdge: boolean;
+  hovered: boolean,
+  x: number,
+  y: number,
+  selected: boolean,
+  mouseDown: boolean,
+  drawingEdge: boolean
 };
 
 export type IPoint = {
-  x: number;
-  y: number;
+  x: number,
+  y: number
 };
 
 class Node extends React.Component<INodeProps, INodeState> {
   static defaultProps = {
     isSelected: false,
     nodeSize: 154,
-    onNodeMouseEnter: () => { return; },
-    onNodeMouseLeave: () => { return; },
-    onNodeMove: () => { return; },
-    onNodeSelected: () => { return; },
-    onNodeUpdate: () => { return; }
+    onNodeMouseEnter: () => {
+      return;
+    },
+    onNodeMouseLeave: () => {
+      return;
+    },
+    onNodeMove: () => {
+      return;
+    },
+    onNodeSelected: () => {
+      return;
+    },
+    onNodeUpdate: () => {
+      return;
+    }
   };
 
-  static getDerivedStateFromProps(nextProps: INodeProps, prevState: INodeState) {
+  static getDerivedStateFromProps(
+    nextProps: INodeProps,
+    prevState: INodeState
+  ) {
     return {
       selected: nextProps.isSelected,
       x: nextProps.data.x,
@@ -112,12 +125,11 @@ class Node extends React.Component<INodeProps, INodeState> {
   componentDidMount() {
     const dragFunction = d3
       .drag()
-      .on('drag', this.handleMouseMove)
-      .on('start', this.handleDragStart)
-      .on('end', this.handleDragEnd);
-    d3
-      .select(this.nodeRef.current)
-      .on('mouseout', this.handleMouseOut)
+      .on("drag", this.handleMouseMove)
+      .on("start", this.handleDragStart)
+      .on("end", this.handleDragEnd);
+    d3.select(this.nodeRef.current)
+      .on("mouseout", this.handleMouseOut)
       .call(dragFunction);
   }
 
@@ -139,11 +151,18 @@ class Node extends React.Component<INodeProps, INodeState> {
       this.setState({ drawingEdge: true });
       // draw edge
       // undo the target offset subtraction done by Edge
-      const off = Edge.calculateOffset(nodeSize, this.props.data, newState, nodeKey, true, viewWrapperElem);
+      const off = Edge.calculateOffset(
+        nodeSize,
+        this.props.data,
+        newState,
+        nodeKey,
+        true,
+        viewWrapperElem
+      );
       newState.x += off.xOff;
       newState.y += off.yOff;
       // now tell the graph that we're actually drawing an edge
-    } else if(!this.state.drawingEdge && layoutEngine) {
+    } else if (!this.state.drawingEdge && layoutEngine) {
       // move node using the layout engine
       Object.assign(newState, layoutEngine.getPositionForNode(newState));
     }
@@ -151,7 +170,7 @@ class Node extends React.Component<INodeProps, INodeState> {
     // Never use this.props.index because if the nodes array changes order
     // then this function could move the wrong node.
     this.props.onNodeMove(newState, this.props.data[nodeKey], shiftKey);
-  }
+  };
 
   handleDragStart = () => {
     if (!this.nodeRef.current) {
@@ -161,8 +180,10 @@ class Node extends React.Component<INodeProps, INodeState> {
       this.oldSibling = this.nodeRef.current.parentElement.nextSibling;
     }
     // Moves child to the end of the element stack to re-arrange the z-index
-    this.nodeRef.current.parentElement.parentElement.appendChild(this.nodeRef.current.parentElement);
-  }
+    this.nodeRef.current.parentElement.parentElement.appendChild(
+      this.nodeRef.current.parentElement
+    );
+  };
 
   handleDragEnd = () => {
     if (!this.nodeRef.current) {
@@ -173,29 +194,31 @@ class Node extends React.Component<INodeProps, INodeState> {
     this.setState({ mouseDown: false, drawingEdge: false });
 
     if (this.oldSibling && this.oldSibling.parentElement) {
-      this.oldSibling.parentElement.insertBefore(this.nodeRef.current.parentElement, this.oldSibling);
+      this.oldSibling.parentElement.insertBefore(
+        this.nodeRef.current.parentElement,
+        this.oldSibling
+      );
     }
 
     const shiftKey = d3.event.sourceEvent.shiftKey;
-    this.props.onNodeUpdate(
-      { x, y },
-      data[nodeKey],
-      shiftKey || drawingEdge
-    );
+    this.props.onNodeUpdate({ x, y }, data[nodeKey], shiftKey || drawingEdge);
 
     this.props.onNodeSelected(data, data[nodeKey], shiftKey || drawingEdge);
-  }
+  };
 
   handleMouseOver = (event: any) => {
     // Detect if mouse is already down and do nothing.
     let hovered = false;
-    if ((d3.event && d3.event.buttons !== 1) || (event && event.buttons !== 1)) {
+    if (
+      (d3.event && d3.event.buttons !== 1) ||
+      (event && event.buttons !== 1)
+    ) {
       hovered = true;
       this.setState({ hovered });
     }
 
     this.props.onNodeMouseEnter(event, this.props.data, hovered);
-  }
+  };
 
   handleMouseOut = (event: any) => {
     // Detect if mouse is already down and do nothing. Sometimes the system lags on
@@ -204,7 +227,7 @@ class Node extends React.Component<INodeProps, INodeState> {
 
     this.setState({ hovered: false });
     this.props.onNodeMouseLeave(event, this.props.data);
-  }
+  };
 
   static getNodeTypeXlinkHref(data: INode, nodeTypes: any) {
     if (data.type && nodeTypes[data.type]) {
@@ -225,22 +248,38 @@ class Node extends React.Component<INodeProps, INodeState> {
   }
 
   renderShape() {
-    const { renderNode, data, index, nodeTypes, nodeSubtypes, nodeKey } = this.props;
+    const {
+      renderNode,
+      data,
+      index,
+      nodeTypes,
+      nodeSubtypes,
+      nodeKey
+    } = this.props;
     const { hovered, selected } = this.state;
     const props = {
       height: this.props.nodeSize || 0,
       width: this.props.nodeSize || 0
     };
-    const nodeShapeContainerClassName = GraphUtils.classNames('shape');
-    const nodeClassName = GraphUtils.classNames('node', { selected, hovered });
-    const nodeSubtypeClassName = GraphUtils.classNames('subtype-shape', { selected: this.state.selected });
-    const nodeTypeXlinkHref = Node.getNodeTypeXlinkHref(data, nodeTypes) || '';
-    const nodeSubtypeXlinkHref = Node.getNodeSubtypeXlinkHref(data, nodeSubtypes) || '';
+    const nodeShapeContainerClassName = GraphUtils.classNames("shape");
+    const nodeClassName = GraphUtils.classNames("node", { selected, hovered });
+    const nodeSubtypeClassName = GraphUtils.classNames("subtype-shape", {
+      selected: this.state.selected
+    });
+    const nodeTypeXlinkHref = Node.getNodeTypeXlinkHref(data, nodeTypes) || "";
+    const nodeSubtypeXlinkHref =
+      Node.getNodeSubtypeXlinkHref(data, nodeSubtypes) || "";
 
     // get width and height defined on def element
-    const defSvgNodeElement: any = nodeTypeXlinkHref ? document.querySelector(`defs>${nodeTypeXlinkHref}`) : null;
-    const nodeWidthAttr = defSvgNodeElement ? defSvgNodeElement.getAttribute('width') : 0;
-    const nodeHeightAttr = defSvgNodeElement ? defSvgNodeElement.getAttribute('height') : 0;
+    const defSvgNodeElement: any = nodeTypeXlinkHref
+      ? document.querySelector(`defs>${nodeTypeXlinkHref}`)
+      : null;
+    const nodeWidthAttr = defSvgNodeElement
+      ? defSvgNodeElement.getAttribute("width")
+      : 0;
+    const nodeHeightAttr = defSvgNodeElement
+      ? defSvgNodeElement.getAttribute("height")
+      : 0;
     props.width = nodeWidthAttr ? parseInt(nodeWidthAttr, 10) : props.width;
     props.height = nodeHeightAttr ? parseInt(nodeHeightAttr, 10) : props.height;
 
@@ -276,17 +315,30 @@ class Node extends React.Component<INodeProps, INodeState> {
   }
 
   renderText() {
-    const { data, index, id, nodeTypes, renderNodeText, isSelected } = this.props;
+    const {
+      data,
+      index,
+      id,
+      nodeTypes,
+      renderNodeText,
+      isSelected
+    } = this.props;
     if (renderNodeText) {
       return renderNodeText(data, id, isSelected);
     }
-    return (<NodeText data={data} nodeTypes={nodeTypes} isSelected={this.state.selected} />);
+    return (
+      <NodeText
+        data={data}
+        nodeTypes={nodeTypes}
+        isSelected={this.state.selected}
+      />
+    );
   }
 
   render() {
     const { x, y, hovered, selected } = this.state;
     const { opacity, id, data } = this.props;
-    const className = GraphUtils.classNames('node', data.type, {
+    const className = GraphUtils.classNames("node", data.type, {
       hovered,
       selected
     });
@@ -302,7 +354,6 @@ class Node extends React.Component<INodeProps, INodeState> {
       >
         {this.renderShape()}
         {this.renderText()}
-
       </g>
     );
   }
