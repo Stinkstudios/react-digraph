@@ -1,27 +1,32 @@
 import React from "react";
 
-const Context = React.createContext();
+export const DigraphContext = React.createContext();
 
-class DigraphContext extends React.Component {
+class DigraphContextProvider extends React.Component {
   state = {
-    focussedNode: null
+    focussedNode: 200
   };
 
-  setFocussedNode = () => {};
+  setFocussedNode = focussedNode => {
+    this.setState({
+      focussedNode
+    });
+  };
 
   render = () => {
     const { focussedNode } = this.state;
+    const { children } = this.props;
 
     return (
-      <Context.Provider
+      <DigraphContext.Provider
         value={{
-          focussedNode
+          focussedNode,
+          setFocussedNode: this.setFocussedNode
         }}
       >
         {children}
-      </Context.Provider>
+      </DigraphContext.Provider>
     );
   };
 }
-
-export default DigraphContext;
+export default DigraphContextProvider;

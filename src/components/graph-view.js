@@ -30,7 +30,7 @@ import GraphControls from "./graph-controls";
 import GraphUtils, { type INodeMapNode } from "./graph-util";
 import Node, { type INode, type IPoint } from "./node";
 import { Transform } from "stream";
-import sendFocussed from "../utilities/sendFocussed";
+import DigraphContextProvider, { DigraphContext } from "../context/context";
 
 type IViewTransform = {
   k: number,
@@ -793,6 +793,7 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
 
   handleNodeSelected = (node: INode, nodeId: string, creatingEdge: boolean) => {
     const { amountOfClicksOnSvg } = this.state;
+    const { setFocussedNode } = this.props;
 
     // add a click to the svg
     this.addClickOnSvg(node);
@@ -808,10 +809,8 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
     }, 300);
 
     if (amountOfClicksOnSvg.amount === 2) {
-      sendFocussed(node);
-      this.setState({
-        focusedNode: node
-      });
+      setFocussedNode(node);
+      this.props.setFocus();
     } else if (amountOfClicksOnSvg.amount === 1) {
       const previousSelection =
         (this.state.selectedNodeObj && this.state.selectedNodeObj.node) || null;
@@ -1431,4 +1430,5 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
   }
 }
 
+GraphView.contextType = DigraphContextProvider;
 export default GraphView;
