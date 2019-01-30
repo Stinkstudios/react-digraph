@@ -63,6 +63,7 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
     canCreateEdge: (startNode?: INode, endNode?: INode) => true,
     canDeleteEdge: () => true,
     canDeleteNode: () => true,
+    setFocus: () => console.log("No setFocus provided in props"),
     edgeArrowSize: 8,
     gridSpacing: 36,
     layoutEngineType: "None",
@@ -793,7 +794,7 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
 
   handleNodeSelected = (node: INode, nodeId: string, creatingEdge: boolean) => {
     const { amountOfClicksOnSvg } = this.state;
-    const { setFocussedNode } = this.props;
+    const { setFocus } = this.props;
 
     // add a click to the svg
     this.addClickOnSvg(node);
@@ -809,8 +810,7 @@ class GraphView extends React.Component<IGraphViewProps, IGraphViewState> {
     }, 300);
 
     if (amountOfClicksOnSvg.amount === 2) {
-      setFocussedNode(node);
-      this.props.setFocus();
+      setFocus(node);
     } else if (amountOfClicksOnSvg.amount === 1) {
       const previousSelection =
         (this.state.selectedNodeObj && this.state.selectedNodeObj.node) || null;

@@ -460,6 +460,10 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
     });
   };
 
+  setFocus = () => {
+    console.log("setting focus!");
+  };
+
   /*
    * Render
    */
@@ -493,7 +497,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
           </div>
         </div>
         <DigraphContext.Consumer>
-          {({ focussedNode, setFocussedNode }) => (
+          {({ focussedNode }) => (
             <GraphView
               ref={el => (this.GraphView = el)}
               nodeKey={NODE_KEY}
@@ -516,7 +520,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
               onPasteSelected={this.onPasteSelected}
               layoutEngineType={this.state.layoutEngineType}
               focussedNode={focussedNode}
-              setFocussedNode={setFocussedNode}
+              setFocus={this.setFocus}
             />
           )}
         </DigraphContext.Consumer>
