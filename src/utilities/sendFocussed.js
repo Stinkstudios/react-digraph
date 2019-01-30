@@ -1,7 +1,5 @@
-const sendFocussed = node => {
+export const sendFocussed = node => {
   console.log("node", node);
 
   return node;
 };
-
-export default sendFocussed;
