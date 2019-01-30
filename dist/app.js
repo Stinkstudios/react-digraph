@@ -29,15 +29,13 @@ import BwdlEditable from "./bwdl-editable";
 import Graph from "./graph";
 
 import "./app.scss";
-import DigraphContextProvider from "../context/context";
 
 class App extends React.Component {
   render() {
     return (
       <Router>
-        <DigraphContextProvider>
-          <div>
-            <header className="app-header">
+        <div>
+          {/* <header className="app-header">
               <nav>
                 <NavLink to="/" exact={true} activeClassName="active">
                   Home
@@ -46,17 +44,16 @@ class App extends React.Component {
                   BWDL
                 </NavLink>
               </nav>
-            </header>
+            </header> */}
 
-            <Route exact={true} path="/" component={Graph} />
-            <Switch>
-              <Route path="/bwdl" component={Bwdl} />
-              {/* The following is for typos */}
-              <Redirect from="/bwld" to="/bwdl" />
-              <Route path="/bwdl-editable" component={BwdlEditable} />
-            </Switch>
-          </div>
-        </DigraphContextProvider>
+          <Route exact={true} path="/" component={Graph} />
+          <Switch>
+            <Route path="/bwdl" component={Bwdl} />
+            {/* The following is for typos */}
+            <Redirect from="/bwld" to="/bwdl" />
+            <Route path="/bwdl-editable" component={BwdlEditable} />
+          </Switch>
+        </div>
       </Router>
     );
   }

@@ -15,14 +15,14 @@
   limitations under the License.
 */
 
-import * as React from 'react';
+import * as React from "react";
 
 class DropshadowFilter extends React.Component<any> {
   render() {
     return (
       <filter id="dropshadow" key="dropshadow" height="130%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-        <feOffset dx="2" dy="2" result="offsetblur" />
+        <feGaussianBlur in="SourceAlpha" stdDeviation="10" />
+        <feOffset dx="0" dy="0" result="offsetblur" />
         <feComponentTransfer>
           <feFuncA type="linear" slope="0.1" />
         </feComponentTransfer>

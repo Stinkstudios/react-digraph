@@ -14,11 +14,13 @@
   limitations under the License.
 */
 
-$primary-color: dodgerblue;
-$light-color: white;
+$primary-color: #3392ff;
+$light-color: #e5f3fe;
+$white: #fff;
+$stroke-color: #3189ff;
 $dark-color: black;
 $light-grey: lightgrey;
-$background-color: #f9f9f9;
+$background-color: #f4f7fc;
 
 .view-wrapper {
   height: 100%;
@@ -44,7 +46,7 @@ $background-color: #f9f9f9;
       > use.node {
         color: $primary-color;
         stroke: $dark-color;
-        fill: $light-color;
+        fill: $white;
         filter: url(#dropshadow);
         stroke-width: 0.5px;
         cursor: pointer;
@@ -54,10 +56,10 @@ $background-color: #f9f9f9;
           stroke: $primary-color;
         }
         &.selected {
-          color: $light-color;
+          color: $primary-color;
           stroke: $primary-color;
           stroke-width: 1px;
-          fill: $primary-color;
+          fill: $light-color;
         }
       }
     }
@@ -67,8 +69,8 @@ $background-color: #f9f9f9;
       cursor: pointer;
       user-select: none;
       &.selected {
-        fill: $light-color;
-        stroke: $light-color;
+        fill: $primary-color;
+        stroke: $primary-color;
       }
     }
   }
@@ -98,8 +100,6 @@ $background-color: #f9f9f9;
         stroke: $light-color;
       }
     }
-
-
   }
 
   .edge-mouse-handler {

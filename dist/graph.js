@@ -39,7 +39,6 @@ import GraphConfig, {
   SPECIAL_TYPE,
   SKINNY_TYPE
 } from "./graph-config"; // Configures node/edge types
-import { DigraphContext } from "../context/context";
 
 type IGraph = {
   nodes: INode[],
@@ -475,7 +474,7 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
 
     return (
       <div id="graph">
-        <div className="graph-header">
+        {/* <div className="graph-header">
           <button onClick={this.addStartNode}>Add Node</button>
           <button onClick={this.deleteStartNode}>Delete Node</button>
           <input
@@ -495,35 +494,30 @@ class Graph extends React.Component<IGraphProps, IGraphState> {
               <option value={"VerticalTree"}>Vertical Tree</option>
             </select>
           </div>
-        </div>
-        <DigraphContext.Consumer>
-          {({ focussedNode }) => (
-            <GraphView
-              ref={el => (this.GraphView = el)}
-              nodeKey={NODE_KEY}
-              nodes={nodes}
-              edges={edges}
-              selected={selected}
-              nodeTypes={NodeTypes}
-              nodeSubtypes={NodeSubtypes}
-              edgeTypes={EdgeTypes}
-              onSelectNode={this.onSelectNode}
-              onCreateNode={this.onCreateNode}
-              onUpdateNode={this.onUpdateNode}
-              onDeleteNode={this.onDeleteNode}
-              onSelectEdge={this.onSelectEdge}
-              onCreateEdge={this.onCreateEdge}
-              onSwapEdge={this.onSwapEdge}
-              onDeleteEdge={this.onDeleteEdge}
-              onUndo={this.onUndo}
-              onCopySelected={this.onCopySelected}
-              onPasteSelected={this.onPasteSelected}
-              layoutEngineType={this.state.layoutEngineType}
-              focussedNode={focussedNode}
-              setFocus={this.setFocus}
-            />
-          )}
-        </DigraphContext.Consumer>
+        </div> */}
+        <GraphView
+          ref={el => (this.GraphView = el)}
+          nodeKey={NODE_KEY}
+          nodes={nodes}
+          edges={edges}
+          selected={selected}
+          nodeTypes={NodeTypes}
+          nodeSubtypes={NodeSubtypes}
+          edgeTypes={EdgeTypes}
+          onSelectNode={this.onSelectNode}
+          onCreateNode={this.onCreateNode}
+          onUpdateNode={this.onUpdateNode}
+          onDeleteNode={this.onDeleteNode}
+          onSelectEdge={this.onSelectEdge}
+          onCreateEdge={this.onCreateEdge}
+          onSwapEdge={this.onSwapEdge}
+          onDeleteEdge={this.onDeleteEdge}
+          onUndo={this.onUndo}
+          onCopySelected={this.onCopySelected}
+          onPasteSelected={this.onPasteSelected}
+          layoutEngineType={this.state.layoutEngineType}
+          setFocus={this.setFocus}
+        />
       </div>
     );
   }

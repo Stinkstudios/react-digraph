@@ -309,10 +309,15 @@ class Node extends React.Component<INodeProps, INodeState> {
             height={props.height}
             xlinkHref={nodeTypeXlinkHref}
           />
+          {this.renderOptions(props.width, props.height)}
         </g>
       );
     }
   }
+
+  renderOptions = () => {
+    return <rect />;
+  };
 
   renderText() {
     const {
@@ -353,6 +358,7 @@ class Node extends React.Component<INodeProps, INodeState> {
         transform={`translate(${x}, ${y})`}
       >
         {this.renderShape()}
+        {/* {this.renderOptions()} */}
         {this.renderText()}
       </g>
     );
